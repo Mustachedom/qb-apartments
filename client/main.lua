@@ -344,7 +344,7 @@ RegisterNetEvent('apartments:client:SpawnInApartment', function(apartmentId, apa
     end
     ClosestHouse = apartment
     EnterApartment(apartment, apartmentId, true)
-    IsOwned = true
+    IsOwned = apartment
 end)
 
 RegisterNetEvent('qb-apartments:client:LastLocationHouse', function(apartmentType, apartmentId)
@@ -435,6 +435,12 @@ end)
 
 local function init()
     IsOwned = QBCore.Functions.TriggerCallback('apartments:IsOwner')
+    if not IsOwned then
+        repeat
+            Wait(2000)
+            IsOwned = QBCore.Functions.TriggerCallback('apartments:IsOwner')
+        until IsOwned
+    end
     createHomeBlip(IsOwned)
     for k, v in pairs (Apartments.Locations) do
         local options = {
